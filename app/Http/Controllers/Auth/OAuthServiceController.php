@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Exceptions\EmailTakenException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
@@ -15,18 +14,13 @@ class OAuthServiceController extends Controller
     public function redirect($service)
     {
         $service = Socialite::driver($service)->stateless()->redirect()->getTargetUrl();
-        
-        return redirect()->back()->with('url', $service);
+        return redirect()->back()->with('success', $service);
     }
 
     public function handleCallback($service)
     {
         $user = Socialite::driver($service)->stateless()->user();
-        
-        // google api bug
-        dd($user);
 
-        // insert additional column to user table
         $user = $this->findOrCreateUser($service, $user);
 
         return view('oauth/callback', [
@@ -45,7 +39,8 @@ class OAuthServiceController extends Controller
         }
 
         if (User::where('email', $user->getEmail())->exists()) {
-            throw new EmailTakenException(); 
+            // create exception
+            // throw new EmailTakenException(); 
         }
 
         return $this->createUser($service, $user);
@@ -58,9 +53,12 @@ class OAuthServiceController extends Controller
             'email' => $sUser->getEmail(),
             'email_verified_at' => $sUser->user['email_verified'] ? Carbon::now()->toDateTime() : null,
             'password' => null,
+            'profile_image_url' => $sUser->getAvatar() ? $sUser->getAvatar() : null,
             'service' => $service,
             'service_id' => $sUser->getId(),
         ]);
+
+        $user->assignRole('user');
 
         return $user;
     }
