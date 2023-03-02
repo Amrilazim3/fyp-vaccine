@@ -6,6 +6,7 @@ import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
+import OAuth from "@/Components/OAuth";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -46,6 +47,10 @@ export default function Login({ status, canResetPassword }) {
             )}
 
             <form onSubmit={submit}>
+                <h3 class="font-semibold text-xl mb-4 text-gray-800">
+                    Login Back To Your Account
+                </h3>
+
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -118,6 +123,19 @@ export default function Login({ status, canResetPassword }) {
                         </Link>{" "}
                     </span>
                 </div>
+
+                <div class="relative py-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-400" />
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-800">
+                            Or continue with
+                        </span>
+                    </div>
+                </div>
+
+                <OAuth />
             </form>
         </GuestLayout>
     );
