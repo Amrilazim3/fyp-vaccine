@@ -89,7 +89,6 @@ export default function OAuth() {
         };
     }, []);
 
-
     const hanldeOnClick = (name) => {
         router.get(
             `/oauth/${name}`,
