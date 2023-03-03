@@ -41,7 +41,7 @@ export default function Register() {
             <Head title="Register" />
 
             <form onSubmit={submit}>
-                <h3 class="font-semibold text-xl mb-4 text-gray-800">
+                <h3 className="font-semibold text-xl mb-4 text-gray-800">
                     Register Your Account
                 </h3>
 
@@ -132,12 +132,12 @@ export default function Register() {
                     </PrimaryButton>
                 </div>
 
-                <div class="relative py-6">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-400" />
+                <div className="relative py-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-400" />
                     </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-800">
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-800">
                             Or continue with
                         </span>
                     </div>
