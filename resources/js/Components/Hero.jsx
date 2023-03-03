@@ -82,14 +82,19 @@ export default function Hero() {
                                         <li
                                             key={link.id}
                                             className={` ${
-                                                (link.name == "login" ||
-                                                link.name == "register")
+                                                link.name == "login" ||
+                                                link.name == "register"
                                                     ? "text-indigo-700 hover:text-indigo-900 md:hidden pt-10"
                                                     : "text-gray-700 hover:text-gray-900 lg:text-lg pt-10 md:pt-0 md:ml-5 lg:ml-10"
                                             } cursor-pointer text-base `}
                                         >
                                             <Link
-                                                href={route("register")}
+                                                href={route(
+                                                    link.name.replace(
+                                                        /\s+/g,
+                                                        "-"
+                                                    )
+                                                )}
                                                 className="capitalize"
                                             >
                                                 {link.name}
