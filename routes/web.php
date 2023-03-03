@@ -9,15 +9,15 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [WelcomeController::class, '__invoke'])->middleware('guest');
+Route::get('/', [WelcomeController::class, '__invoke'])->middleware('guest')->name('welcome');
 
-Route::get('terms-of-service', [TermsOfServiceController::class, '__invoke']);
+Route::get('terms-of-service', [TermsOfServiceController::class, '__invoke'])->name('terms-of-service');
 
-Route::get('privacy-policy', [PrivacyPolicyController::class, '__invoke']);
+Route::get('privacy-policy', [PrivacyPolicyController::class, '__invoke'])->name('privacy-policy');
 
-Route::get('about', [AboutController::class, '__invoke']);
+Route::get('about', [AboutController::class, '__invoke'])->name('about');
 
-Route::get('team', [TeamController::class, '__invoke']);
+Route::get('team', [TeamController::class, '__invoke'])->name('team');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
