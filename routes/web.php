@@ -1,18 +1,23 @@
 <?php
 
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TermsOfServiceController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [WelcomeController::class, '__invoke'])->middleware('guest');
+
+Route::get('terms-of-service', [TermsOfServiceController::class, '__invoke']);
+
+Route::get('privacy-policy', [PrivacyPolicyController::class, '__invoke']);
+
+Route::get('about', [AboutController::class, '__invoke']);
+
+Route::get('team', [TeamController::class, '__invoke']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
