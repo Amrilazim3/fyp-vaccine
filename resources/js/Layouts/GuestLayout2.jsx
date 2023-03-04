@@ -15,8 +15,6 @@ const navLinks = [
 export default function GuestLayout2({ children }) {
     const [show, setShow] = useState(false);
 
-    // console.log(usePage().props.ziggy.location);
-
     return (
         <div
             className="bg-gray-100 overflow-y-hidden"
