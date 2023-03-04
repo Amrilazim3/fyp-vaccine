@@ -1,6 +1,7 @@
 import Footer from "@/Components/Footer";
 import { Link } from "@inertiajs/react";
 import { useState } from "react";
+import { usePage } from "@inertiajs/react";
 
 const navLinks = [
     { id: 1, name: "terms of service" },
@@ -14,19 +15,23 @@ const navLinks = [
 export default function GuestLayout2({ children }) {
     const [show, setShow] = useState(false);
 
+    // console.log(usePage().props.ziggy.location);
+
     return (
         <div
-            className="bg-gray-100 pb-12 overflow-y-hidden"
+            className="bg-gray-100 overflow-y-hidden"
             style={{ minHeight: 700 }}
         >
             <nav className="w-full border-b">
                 <div className="py-5 md:py-0 container mx-auto px-6 flex items-center justify-between">
                     <div aria-label="Application Logo" role="img">
-                        <img
-                            className="w-12 md:w-auto"
-                            src="https://tuk-cdn.s3.amazonaws.com/can-uploader/centre_aligned_simple-Svg1.svg"
-                            alt="logo"
-                        />
+                        <Link href="/">
+                            <img
+                                className="w-12 md:w-auto"
+                                src="https://tuk-cdn.s3.amazonaws.com/can-uploader/centre_aligned_simple-Svg1.svg"
+                                alt="logo"
+                            />
+                        </Link>
                     </div>
                     <div>
                         <button
@@ -82,6 +87,11 @@ export default function GuestLayout2({ children }) {
                             </button>
                             <ul className="flex text-3xl md:text-base items-center py-10 md:flex flex-col md:flex-row justify-center fixed md:relative top-0 bottom-0 left-0 right-0 bg-white md:bg-transparent z-20">
                                 {navLinks.map((link) => {
+                                    let hyphenedName = link.name.replace(
+                                        /\s+/g,
+                                        "-"
+                                    );
+
                                     return (
                                         <li
                                             key={link.id}
@@ -90,15 +100,18 @@ export default function GuestLayout2({ children }) {
                                                 link.name == "register"
                                                     ? "text-indigo-700 hover:text-indigo-900 md:hidden pt-10"
                                                     : "text-gray-700 hover:text-gray-900 lg:text-lg pt-10 md:pt-0 md:ml-5 lg:ml-10"
-                                            } cursor-pointer text-base `}
+                                            } 
+                                            ${
+                                                usePage().props.ziggy.location.includes(
+                                                    hyphenedName
+                                                )
+                                                    ? "text-indigo-700"
+                                                    : ""
+                                            }
+                                            cursor-pointer text-base `}
                                         >
                                             <Link
-                                                href={route(
-                                                    link.name.replace(
-                                                        /\s+/g,
-                                                        "-"
-                                                    )
-                                                )}
+                                                href={route(hyphenedName)}
                                                 className="capitalize"
                                             >
                                                 {link.name}
