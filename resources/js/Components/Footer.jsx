@@ -5,7 +5,7 @@ export default function Footer() {
     const [mode, setMode] = useState("auto");
     return (
         <div className="pt-12">
-            <footer id="footer" className="relative z-50 pt-24">
+            <footer id="footer" className="relative z-50">
                 <div className="border-t py-8 flex flex-col justify-center items-center">
                     <Link href="/">
                         <svg
