@@ -2,6 +2,7 @@ import Footer from "@/Components/Footer";
 import { Link } from "@inertiajs/react";
 import { useState } from "react";
 import { usePage } from "@inertiajs/react";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 const navLinks = [
     { id: 1, name: "terms of service" },
@@ -23,12 +24,9 @@ export default function GuestLayout2({ children }) {
             <nav className="w-full border-b">
                 <div className="py-5 md:py-0 container mx-auto px-6 flex items-center justify-between">
                     <div aria-label="Application Logo" role="img">
-                        <Link href="/">
-                            <img
-                                className="w-12 md:w-auto"
-                                src="https://tuk-cdn.s3.amazonaws.com/can-uploader/centre_aligned_simple-Svg1.svg"
-                                alt="logo"
-                            />
+                        <Link href="/" className="flex space-x-2">
+                            <ApplicationLogo />
+                            <h3 className="self-center text-md text-indigo-800 font-semibold">vaccimate</h3>
                         </Link>
                     </div>
                     <div>
