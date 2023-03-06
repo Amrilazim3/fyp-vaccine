@@ -98,9 +98,7 @@ export default function GuestLayout2({ children }) {
                                                     : "text-gray-700 hover:text-indigo-700 lg:text-lg pt-10 md:pt-0 md:ml-5 lg:ml-10"
                                             } 
                                             ${
-                                                usePage().props.ziggy.location.includes(
-                                                    hyphenedName
-                                                )
+                                                route().current(hyphenedName)
                                                     ? "text-indigo-700"
                                                     : ""
                                             }
