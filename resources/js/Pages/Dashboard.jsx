@@ -55,7 +55,7 @@ export default function Dashboard(props) {
                         </div> */}
                         {/* if user already has children registered */}
                         <div className="container mx-auto pt-8 pb-16 px-4 md:px-8 lg:px-12">
-                            <h1 className="text-gray-800 text-xl md:text-2xl lg:text-3xl font-bold mb-8 md:mb-10">
+                            <h1 className="text-gray-800 text-xl md:text-2xl font-bold mb-8 md:mb-10">
                                 Child Tracking Summary
                             </h1>
                             <ul className="bg-gray-100 p-4 md:p-8 lg:p-12 rounded-lg">
