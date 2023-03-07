@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('vaccine_id')->constrained()->cascadeOnDelete();
             $table->foreignId('parent_id')->nullable()->constrained('vaccine_requirements')->cascadeOnDelete();
-            $table->enum('type', ['month', 'age', 'state']);
+            $table->enum('type', ['month', 'gender', 'state']);
             $table->string('value');
             $table->timestamps();
         });
