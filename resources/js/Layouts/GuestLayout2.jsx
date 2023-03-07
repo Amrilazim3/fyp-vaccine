@@ -120,7 +120,7 @@ export default function GuestLayout2({ children }) {
                         <button className="focus:outline-none lg:text-lg lg:font-bold focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 hidden md:block bg-transparent transition duration-150 ease-in-out hover:bg-gray-200 rounded border border-indigo-700 text-indigo-700 px-4 sm:px-6 py-1 sm:py-2 text-sm">
                             <Link href={route("login")}>login</Link>
                         </button>
-                        <button className="bg-gray-700 focus:outline-none lg:text-lg lg:font-bold focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 hidden md:block bg-transparent transition duration-150 ease-in-out hover:bg-gray-500 rounded border border-gray-700 text-white px-4 sm:px-6 py-1 sm:py-2 text-sm">
+                        <button className="bg-gray-700 focus:outline-none lg:text-lg lg:font-bold focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 hidden md:block transition duration-150 ease-in-out hover:bg-gray-500 rounded border border-gray-700 text-white px-4 sm:px-6 py-1 sm:py-2 text-sm">
                             <Link href={route("register")}>Register</Link>
                         </button>
                     </div>
