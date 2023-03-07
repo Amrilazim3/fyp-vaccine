@@ -10,4 +10,11 @@ class Vaccine extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function children()
+    {
+        return $this->belongsToMany(Child::class)
+            ->using(ChildVaccine::class)
+            ->withPivot('dose_taken');
+    }
 }
