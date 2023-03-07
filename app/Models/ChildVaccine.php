@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ChildVaccine extends Model
+class ChildVaccine extends Pivot
 {
-    use HasFactory;
-
-    protected $guarded = [];
+    //
 }
