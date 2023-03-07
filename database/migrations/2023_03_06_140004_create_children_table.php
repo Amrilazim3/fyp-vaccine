@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('parent_id')->constrained('users')->cascadeOnDelete();
             $table->string('name');
             $table->date('birthdate')->nullable();
-            $table->string('gender')->comment('male / female');
+            $table->enum('gender', ['male', 'female']);
             $table->string('state')->comment('all states in malaysia');
             $table->timestamps();
         });
