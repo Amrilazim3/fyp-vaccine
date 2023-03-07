@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vaccines', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->text('description');
             $table->unsignedInteger('max_to_taken');
             $table->timestamps();
