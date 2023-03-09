@@ -17,25 +17,25 @@ class VaccineSeeder extends Seeder
                 ['month', 84],
             ]],
             ["Hepatits B", "desc", 3, [
-                ['month', 0],
+                ['month', 0.1],
                 ['month', 1],
                 ['month', 5],
             ]],
             ["DPT+Hib", "desc", 3, [
                 ['month', 2],
                 ['month', 3],
-                ['month', 5],
+                ['month', 5.1],
             ]],
             ["DPT/DT", "desc", 2, [
                 ['month', 18],
-                ['month', 84],
+                ['month', 84.1],
             ]],
             ["OPV", "desc", 5, [
-                ['month', 2],
-                ['month', 3],
-                ['month', 5],
-                ['month', 18],
-                ['month', 84],
+                ['month', 2.1],
+                ['month', 3.1],
+                ['month', 5.2],
+                ['month', 18.1],
+                ['month', 84.2],
             ]],
             ["Measles", "desc", 1, [
                 ['month', 6],
@@ -43,7 +43,7 @@ class VaccineSeeder extends Seeder
             ]],
             ["MMR", "desc", 2, [
                 ['month', 12],
-                ['month', 84],
+                ['month', 84.3],
             ]],
             ["Tetanus", "desc", 1, [
                 ['month', 180],
