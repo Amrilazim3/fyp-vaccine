@@ -5,10 +5,17 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import ChildrenForm from "@/Components/ChildrenForm";
 
 export default function Authenticated({ auth, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+
+    const [isOpenChildrenForm, setIsOpenChildrenForm] = useState(false);
+
+    const handleOnClickAddChildrenButtton = () => {
+        setIsOpenChildrenForm(!isOpenChildrenForm);
+    };
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -31,7 +38,8 @@ export default function Authenticated({ auth, header, children }) {
                                 </NavLink>
                                 <button
                                     type="button"
-                                    className="flex space-x-1 self-center"
+                                    className="flex space-x-1 self-center p-2 rounded-md hover:bg-gray-100"
+                                    onClick={handleOnClickAddChildrenButtton}
                                 >
                                     <PlusIcon className="h-5 w-5 self-center text-gray-500 pr-1" />
                                     children
@@ -143,13 +151,14 @@ export default function Authenticated({ auth, header, children }) {
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route("children")}
-                            active={route().current("children")}
+                        <button
+                            type="button"
+                            className="flex p-2 hover:bg-gray-100 rounded-md"
+                            onClick={handleOnClickAddChildrenButtton}
                         >
-                            <PlusIcon className="h-5 w-5 font-semibold text-gray-500 pr-1" />
+                            <PlusIcon className="h-5 w-5 self-center font-semibold text-gray-500 pr-1" />
                             children
-                        </ResponsiveNavLink>
+                        </button>
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
@@ -190,6 +199,15 @@ export default function Authenticated({ auth, header, children }) {
             )}
 
             <main>{children}</main>
+
+            {isOpenChildrenForm && (
+                <ChildrenForm
+                    isOpen={isOpenChildrenForm}
+                    handleOnClose={
+                        handleOnClickAddChildrenButtton
+                    }
+                />
+            )}
         </div>
     );
 }
