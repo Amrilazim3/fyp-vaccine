@@ -22,7 +22,7 @@ export default function ChildrenForm({ isOpen, handleOnClose }) {
 
     const handleSelectChange = (name, value) => {
         setData(name, value);
-    }
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -99,7 +99,7 @@ export default function ChildrenForm({ isOpen, handleOnClose }) {
                         options={["male", "female"]}
                         isRequired={true}
                         onChange={(value) => {
-                            handleSelectChange("gender", value)
+                            handleSelectChange("gender", value);
                         }}
                     />
 
@@ -112,10 +112,27 @@ export default function ChildrenForm({ isOpen, handleOnClose }) {
                     <CustomSelect
                         id="state"
                         className="mt-1 block w-full"
-                        options={["johor", "perak", "sabah"]}
+                        options={[
+                            "Johor",
+                            "Kedah",
+                            "Kelantan",
+                            "Melaka",
+                            "Negeri Sembilan",
+                            "Pahang",
+                            "Perak",
+                            "Perlis",
+                            "Pulau Pinang",
+                            "Sarawak",
+                            "Selangor",
+                            "Terengganu",
+                            "Kuala Lumpur",
+                            "Labuan",
+                            "Sabah",
+                            "Putrajaya",
+                        ]}
                         isRequired={true}
                         onChange={(value) => {
-                            handleSelectChange("state", value)
+                            handleSelectChange("state", value);
                         }}
                     />
 
