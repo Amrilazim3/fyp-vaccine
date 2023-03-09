@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import TextInput from "./TextInput";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import CustomSelect from "./CustomSelect";
+import { Toast } from "@/mixins/toast";
 
 export default function ChildrenForm({ isOpen, handleOnClose }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -26,12 +27,18 @@ export default function ChildrenForm({ isOpen, handleOnClose }) {
 
     const submit = (e) => {
         e.preventDefault();
-        // post("children", {
-        //     preserveScroll: true,
-        //     onSuccess: () => {
-        //         handleOnClose();
-        //     },
-        // });
+
+        post(route("children.store"), {
+            preserveScroll: true,
+            onSuccess: () => {
+                handleOnClose();
+                reset(["name", "birthdate", "gender", "state"]);
+                Toast.fire({
+                    icon: "success",
+                    title: "Child successfully added",
+                });
+            },
+        });
     };
 
     return (
