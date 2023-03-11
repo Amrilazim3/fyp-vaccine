@@ -1,12 +1,18 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ChildrenController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TermsOfServiceController;
 use App\Http\Controllers\WelcomeController;
+use App\Jobs\SendVaccineNotification;
+use App\Models\Child;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, '__invoke'])->middleware('guest')->name('welcome');
@@ -22,12 +28,24 @@ Route::get('team', [TeamController::class, '__invoke'])->name('team');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/children', function() {
-        dd('hello world');
-    })->name('children');
+    Route::post('/children', [ChildrenController::class, 'store'])->name('children.store');
+    Route::get('/children/{id}', [ChildrenController::class, 'show'])->name('children.show');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+
+Route::get('/tinker', function () {
+    SendVaccineNotification::dispatch(
+        $user = User::first(),
+        $child = Child::first(),
+        'BCG'
+    )
+    ->onQueue('child_' . $child->id);
+
+    dd('success');
+})->name('tinker');
