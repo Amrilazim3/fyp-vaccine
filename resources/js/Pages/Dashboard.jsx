@@ -53,7 +53,7 @@ export default function Dashboard(props) {
                     </a>
                 </div> */}
                 {/* if user already has children registered */}
-                {/* <div>
+                <div>
                     <h1 className="text-gray-800 text-xl md:text-2xl font-bold mb-4 md:mb-6">
                         Child Tracking Summary
                     </h1>
@@ -96,7 +96,7 @@ export default function Dashboard(props) {
                             </li>
                         ))}
                     </ul>
-                </div> */}
+                </div>
             </ContentContainer>
         </AuthenticatedLayout>
     );
