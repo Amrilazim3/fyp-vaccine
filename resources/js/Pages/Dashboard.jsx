@@ -55,7 +55,7 @@ export default function Dashboard(props) {
                 {/* if user already has children registered */}
                 <div>
                     <h1 className="text-gray-800 text-xl md:text-2xl font-bold mb-4 md:mb-6">
-                        Child Tracking Summary
+                        Vaccination Summary
                     </h1>
                     <ul className="bg-gray-100 p-4 md:p-8 lg:p-12 rounded-lg">
                         {children.map((child, index) => (
@@ -66,30 +66,37 @@ export default function Dashboard(props) {
                                 <div className="text-indigo-500 text-sm">
                                     Child #{index + 1}
                                 </div>
-                                <div className="md:flex md:flex-row md:justify-between">
-                                    <div className="flex flex-col md:w-48 lg:w-64">
-                                        <h2 className="text-lg lg:text-xl font-medium text-gray-900">
-                                            {child.name}
-                                        </h2>
-                                        <p className="text-gray-600">
-                                            {child.age} years old
-                                        </p>
+                                <div>
+                                    <div className="flex justify-between">
+                                        <div className="flex flex-col">
+                                            <h2 className="text-lg lg:text-xl font-medium text-gray-900">
+                                                {child.name}
+                                            </h2>
+                                            <p className="text-gray-600">
+                                                {child.age} years old
+                                            </p>
+                                        </div>
+                                        <button className="text-sm font-semibold rounded-md px-5 text-white bg-indigo-500 hover:bg-indigo-400">
+                                            view
+                                        </button>
                                     </div>
-                                    <div className="mt-4 md:mt-0">
-                                        <p className="text-gray-600">
-                                            Completed percentage:
-                                        </p>
-                                        <p className="text-gray-900 font-medium">
-                                            {child.completedPercentage}%
-                                        </p>
-                                    </div>
-                                    <div className="mt-4 md:mt-0">
-                                        <p className="text-gray-600">
-                                            Next vaccination:
-                                        </p>
-                                        <p className="text-gray-900 font-medium">
-                                            {child.nextVaccination}
-                                        </p>
+                                    <div className="md:flex md:mt-4 md:space-x-10">
+                                        <div className="mt-4 md:mt-0">
+                                            <p className="text-gray-600">
+                                                Completed percentage:
+                                            </p>
+                                            <p className="text-gray-900 font-medium">
+                                                {child.completedPercentage}%
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 md:mt-0">
+                                            <p className="text-gray-600">
+                                                Next vaccination:
+                                            </p>
+                                            <p className="text-gray-900 font-medium">
+                                                {child.nextVaccination}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                                 <hr className="border-gray-300 my-4 md:my-8 lg:my-12" />
