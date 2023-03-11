@@ -11,10 +11,10 @@ import { Toast } from "@/mixins/toast";
 
 export default function ChildrenForm({ isOpen, handleOnClose }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
-        birthdate: "",
-        gender: "",
-        state: "",
+        name: "asdhsahdsa dsha das",
+        birthdate: "2023-03-11",
+        gender: "male",
+        state: "Johor",
     });
 
     const handleOnChange = (event) => {
@@ -105,6 +105,7 @@ export default function ChildrenForm({ isOpen, handleOnClose }) {
                         className="mt-1 block w-full"
                         options={["male", "female"]}
                         isRequired={true}
+                        value={data.gender}
                         onChange={(value) => {
                             handleSelectChange("gender", value);
                         }}
@@ -119,6 +120,7 @@ export default function ChildrenForm({ isOpen, handleOnClose }) {
                     <CustomSelect
                         id="state"
                         className="mt-1 block w-full"
+                        value={data.state}
                         options={[
                             "Johor",
                             "Kedah",

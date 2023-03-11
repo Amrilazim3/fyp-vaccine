@@ -2,17 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Models\Child;
 use App\Models\User;
+use App\Models\Child;
 use App\Models\Vaccine;
-use App\Models\VaccineRequirement;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Models\VaccineRequirement;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 
 class ScheduleForVaccination implements ShouldQueue
 {
@@ -36,7 +35,7 @@ class ScheduleForVaccination implements ShouldQueue
                 }
             }
 
-            if ($monthsLeft = $this->child->getMonthsLeftForVac($vacReq['model']) >= 0) {
+            if (($monthsLeft = $this->child->getMonthsLeftForVac($vacReq['model'])) >= 0) {
                 SendVaccineNotification::dispatch(
                     $this->child->parent,
                     $this->child,
@@ -75,7 +74,7 @@ class ScheduleForVaccination implements ShouldQueue
         });
     }
 
-    protected function isPassRequirements(array $additionalReq) : bool
+    protected function isPassRequirements(array $additionalReq): bool
     {
         foreach ($additionalReq as $req) {
             if ($this->child->{$req['type']} != $req['value']) {

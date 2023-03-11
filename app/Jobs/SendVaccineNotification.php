@@ -2,16 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Models\Child;
 use App\Models\User;
-use App\Notifications\VaccinationNotice;
+use App\Models\Child;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Queue\PendingDispatch;
+use Illuminate\Queue\SerializesModels;
+use App\Notifications\VaccinationNotice;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class SendVaccineNotification implements ShouldQueue
 {
@@ -34,7 +35,19 @@ class SendVaccineNotification implements ShouldQueue
     public function handle(): void
     {
         // if ($this->child->fresh()->is_deleted) return;
-        
+
         Notification::send($this->user, new VaccinationNotice($this->child, $this->vaccineName));
+    }
+
+    public static function dispatch(...$arguments)
+    {
+        return new PendingDispatch(new static(...$arguments));
+    }
+
+    public function meta()
+    {
+        return [
+            'child_id' => $this->child->id,
+        ];
     }
 }

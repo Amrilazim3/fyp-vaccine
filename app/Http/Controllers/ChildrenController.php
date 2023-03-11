@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ScheduleForVaccination;
 use App\Models\Child;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -34,5 +35,21 @@ class ChildrenController extends Controller
         return Inertia::render('Child', [
             'name' => $child->name
         ]);
+    }
+
+    // update
+    public function update(Request $request, Child $child)
+    {
+        // validate
+
+        // update
+
+        // delete all jobs
+        Job::where('meta->child_id', $child->id)->delete();
+
+        // dispatch
+        ScheduleForVaccination::dispatch($child);
+
+        return redirect()->to(route('dashboard'));
     }
 }
