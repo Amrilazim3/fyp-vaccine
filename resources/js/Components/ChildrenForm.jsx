@@ -11,10 +11,10 @@ import { Toast } from "@/mixins/toast";
 
 export default function ChildrenForm({ isOpen, handleOnClose }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: "asdhsahdsa dsha das",
-        birthdate: "2023-03-11",
-        gender: "male",
-        state: "Johor",
+        name: "",
+        birthdate: "",
+        gender: "",
+        state: "",
     });
 
     const handleOnChange = (event) => {
