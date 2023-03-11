@@ -27,10 +27,12 @@ class ChildrenController extends Controller
         return redirect()->to(route('dashboard'));
     }
 
-    public function show(Child $id, Request $request)
+    public function show($id, Request $request)
     {
+        $child = Child::find($id);
+
         return Inertia::render('Child', [
-            'foo' => 'bar'
+            'name' => $child->name
         ]);
     }
 }
