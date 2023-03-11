@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\ScheduleForVaccination;
 use App\Models\Child;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ChildrenController extends Controller
 {
@@ -24,5 +25,12 @@ class ChildrenController extends Controller
         ScheduleForVaccination::dispatch($child);
 
         return redirect()->to(route('dashboard'));
+    }
+
+    public function show(Child $id, Request $request)
+    {
+        return Inertia::render('Child', [
+            'foo' => 'bar'
+        ]);
     }
 }

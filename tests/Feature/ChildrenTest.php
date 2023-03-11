@@ -88,4 +88,35 @@ class ChildrenTest extends TestCase
 
         Queue::assertPushed(SendVaccineNotification::class, $expectedNotification);
     }
+
+    public function test_children_can_be_updated()
+    {
+        //
+    }
+
+    public function test_children_can_be_deleted()
+    {
+        //
+    }
+
+    public function test_queue_job()
+    {
+        $user = User::factory()->create();
+
+        $child = $user->children()->create([
+            'parent_id' => $user->id,
+            'name' => fake()->name('male'),
+            'birthdate' => Carbon::now()->format('Y-m-d'),
+            'gender' => 'male',
+            'state' => 'johor',
+        ]);
+
+        SendVaccineNotification::dispatch(
+            $user,
+            $child,
+            'BCG'
+        );
+
+        dd('success');
+    } 
 }
