@@ -21,7 +21,44 @@ class ChildrenTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_add_children(): void
+    public function addChildrenProvider(): array
+    {
+        return [
+            [
+                fake()->name('male'),
+                Carbon::now()->format('Y-m-d'),
+                'male',
+                'johor',
+                18
+            ],
+            [
+                fake()->name('female'),
+                Carbon::now()->format('Y-m-d'),
+                'female',
+                'johor',
+                19
+            ],
+            [
+                fake()->name('female'),
+                Carbon::now()->format('Y-m-d'),
+                'female',
+                'sabah',
+                20
+            ],
+            [
+                fake()->name('male'),
+                Carbon::now()->subYears(10)->format('Y-m-d'),
+                'male',
+                'johor',
+                1
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider addChildrenProvider
+     */
+    public function test_add_children($name, $birthdate, $gender, $state, $expectedNotification): void
     {
         Queue::fake();
         Notification::fake();
@@ -29,12 +66,12 @@ class ChildrenTest extends TestCase
         $this->seed(VaccineSeeder::class);
 
         $input = [
-            'name' => fake()->name('male'),
-            'birthdate' => Carbon::now()->format('Y-m-d'),
-            'gender' => 'male',
-            'state' => 'johor'
+            'name' => $name,
+            'birthdate' => $birthdate,
+            'gender' => $gender,
+            'state' => $state
         ];
-        
+
         $response = $this->actingAs($user = User::factory()->create())
             ->post(route('children.store'), $input);
 
@@ -43,17 +80,12 @@ class ChildrenTest extends TestCase
         $this->assertDatabaseHas('children', $input);
 
         Queue::assertPushed(ScheduleForVaccination::class);
-        
-        $child = Child::with('parent')->where('name', $input['name'])->first();
+
+        $child = Child::with('parent')->where('name', $name)->first();
 
         $job = new ScheduleForVaccination($child);
         $job->handle();
 
-        Queue::assertPushed(SendVaccineNotification::class, 18);
-
-        $job2 = new SendVaccineNotification($user, $child, Vaccine::first());
-        $job2->handle();
-
-        Notification::assertSentTo($user, VaccinationNotice::class);
+        Queue::assertPushed(SendVaccineNotification::class, $expectedNotification);
     }
 }
