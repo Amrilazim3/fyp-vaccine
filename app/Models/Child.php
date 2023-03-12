@@ -7,6 +7,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class Child extends Model
@@ -17,6 +18,11 @@ class Child extends Model
 
     protected $casts = [
         'birthdate' => 'datetime:Y-m-d'
+    ];
+
+    protected $appends = [
+        'age_in_months',
+        'completed_percentage'
     ];
 
     public function parent()
@@ -38,8 +44,54 @@ class Child extends Model
         );
     }
 
+    protected function completedPercentage(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $allowedVaccines = $this->getAllowedVaccines();
+
+                $percent = ($this->vaccines->count() / count($allowedVaccines)) * 1;
+
+                return number_format($percent, 2) . "%";
+            }
+        );
+    }
+
     public function getMonthsLeftForVac(VaccineRequirement $vr)
     {
         return intval($vr->value) - $this->ageInMonths;
+    }
+
+    public function getAllowedVaccines(): array
+    {
+        $vaccinesReqs = (new VaccineRequirement())
+            ->getVaccinesRequirements();
+
+        $allowedVaccines = [];
+
+        foreach ($vaccinesReqs as $vacReq) {
+            if (count($additionalReqs = $vacReq['addtional_reqs']) > 0) {
+                if (!$this->isPassRequirements($additionalReqs)) {
+                    continue;
+                }
+            }
+
+            if ($this->getMonthsLeftForVac($vacReq['model']) >= 0) {
+                $allowedVaccines[] = $vacReq;
+            }
+        }
+
+        return $allowedVaccines;
+    }
+
+    protected function isPassRequirements(array $additionalReq): bool
+    {
+        foreach ($additionalReq as $req) {
+            if ($this->{$req['type']} != $req['value']) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
