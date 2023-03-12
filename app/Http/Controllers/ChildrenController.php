@@ -14,7 +14,7 @@ class ChildrenController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|min:10|max:50',
-            'birthdate' => 'required|date|after_or_equal:' . date('Y-m-d', strtotime('-15 years')),
+            'birthdate' => 'required|date|after_or_equal:' . date('Y-m-d', strtotime('-15 years')) . '|before_or_equal:' . date('Y-m-d'),
             'gender' => 'required',
             'state' => 'required',
         ]);
