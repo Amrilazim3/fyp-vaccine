@@ -22,7 +22,6 @@ class Child extends Model
 
     protected $appends = [
         'age_in_months',
-        'percentage_completed'
     ];
 
     public function parent()
@@ -57,6 +56,44 @@ class Child extends Model
         );
     }
 
+    public function nextVaccinationInfo(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $allowedVaccines = $this->getAllowedVaccines();
+
+                $takenVaccines = $this->vaccines->toArray();
+
+                foreach ($takenVaccines as $takenVaccine) {
+                    $namedVaccines = array_filter($allowedVaccines, function ($vaccine) use ($takenVaccine) {
+                        return $vaccine['name'] == $takenVaccine['name'];
+                    });
+                    
+                    $temp = $takenVaccine['pivot']['dose_taken'];
+
+                    foreach ($namedVaccines as $namedVacKey => $namedVacValue) {
+                        while ($temp !== 0) {
+                            unset($allowedVaccines[$namedVacKey]);
+                            $temp--;
+                        }
+                    }
+                }
+
+                foreach ($allowedVaccines as $vaccine) {
+                    if ($this->age_in_months >= intval($vaccine['month'])) {
+                        return [
+                            'name' => $vaccine['name'],
+                            'date' => Carbon::now()
+                                ->addMonths($this->age_in_months)
+                                ->addDays(3)
+                                ->format('Y-m-d')
+                        ];
+                    }
+                }
+            }
+        );
+    }
+
     public function getMonthsLeftForVac(VaccineRequirement $vr)
     {
         return intval($vr->value) - $this->ageInMonths;
@@ -64,8 +101,7 @@ class Child extends Model
 
     public function getAllowedVaccines(): array
     {
-        $vaccinesReqs = (new VaccineRequirement())
-            ->getVaccinesRequirements();
+        $vaccinesReqs = VaccineRequirement::getVaccinesRequirements();
 
         $allowedVaccines = [];
 
