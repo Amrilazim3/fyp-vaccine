@@ -34,8 +34,6 @@ class SendVaccineNotification implements ShouldQueue
      */
     public function handle(): void
     {
-        // if ($this->child->fresh()->is_deleted) return;
-
         Notification::send($this->user, new VaccinationNotice($this->child, $this->vaccineName));
     }
 
