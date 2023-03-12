@@ -32,7 +32,7 @@ class VaccineRequirement extends Model
         return $query->where('type', 'month');
     }
 
-    public function getVaccinesRequirements()
+    public static function getVaccinesRequirements()
     {
         return Cache::rememberForever('vaccines-requirements', function () {
             $vaccines = Vaccine::all();
