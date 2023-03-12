@@ -22,7 +22,7 @@ class Child extends Model
 
     protected $appends = [
         'age_in_months',
-        'completed_percentage'
+        'percentage_completed'
     ];
 
     public function parent()
@@ -44,7 +44,7 @@ class Child extends Model
         );
     }
 
-    protected function completedPercentage(): Attribute
+    protected function percentageCompleted(): Attribute
     {
         return Attribute::make(
             get: function () {
