@@ -7,8 +7,16 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Dashboard');
+        $children = $request->user()->children()->get();
+
+        $children->each(function ($child) {
+            $child->append(['percentage_completed', 'next_vaccination_info']);
+        });
+
+        return Inertia::render('Dashboard', [
+            'children' => $children
+        ]);
     }
 }
