@@ -26,62 +26,19 @@ class ScheduleForVaccination implements ShouldQueue
 
     public function handle(): void
     {
-        $vaccinesReqs = $this->getVaccinesRequirements();
+        $allowedVaccines = $this->child->getAllowedVaccines();
 
-        foreach ($vaccinesReqs as $vacReq) {
-            if (count($additionalReqs = $vacReq['addtional_reqs']) > 0) {
-                if (!$this->isPassRequirements($additionalReqs)) {
-                    continue;
-                }
-            }
+        foreach ($allowedVaccines as $vacReq) {
+            $monthsLeft = $this->child->getMonthsLeftForVac($vacReq['model']);
 
-            if (($monthsLeft = $this->child->getMonthsLeftForVac($vacReq['model'])) >= 0) {
-                SendVaccineNotification::dispatch(
-                    $this->child->parent,
-                    $this->child,
-                    $vacReq['name']
-                )
-                    ->delay(now()->addMonths(
-                        $monthsLeft
-                    )->addDays(3));
-            }
+            SendVaccineNotification::dispatch(
+                $this->child->parent,
+                $this->child,
+                $vacReq['name']
+            )
+                ->delay(now()->addMonths(
+                    $monthsLeft
+                )->addDays(3));
         }
-    }
-
-    protected function getVaccinesRequirements()
-    {
-        return Cache::rememberForever('vaccines-requirements', function () {
-            $vaccines = Vaccine::all();
-            $requirements = VaccineRequirement::with(['childrenNotMonth', 'parent'])
-                ->month()
-                ->orderBy('value', 'asc')
-                ->get();
-
-            $flatten = [];
-            $requirements->sortBy('value')->each(function ($req) use ($vaccines, &$flatten) {
-                $vaccine = $vaccines->firstWhere('id', $req->vaccine_id);
-
-                $flatten[] = [
-                    'name' => $vaccine->name,
-                    'model' => $req,
-                    'month' => $req->value,
-                    'depend_on' => !$req->parent ? null : $req->parent->toArray(),
-                    'addtional_reqs' => $req->childrenNotMonth->toArray()
-                ];
-            });
-
-            return $flatten;
-        });
-    }
-
-    protected function isPassRequirements(array $additionalReq): bool
-    {
-        foreach ($additionalReq as $req) {
-            if ($this->child->{$req['type']} != $req['value']) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
