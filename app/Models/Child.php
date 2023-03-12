@@ -80,7 +80,7 @@ class Child extends Model
                 }
 
                 foreach ($allowedVaccines as $vaccine) {
-                    if ($this->age_in_months >= intval($vaccine['month'])) {
+                    if ($this->age_in_months <= intval($vaccine['month'])) {
                         return [
                             'name' => $vaccine['name'],
                             'date' => Carbon::now()
