@@ -12,12 +12,7 @@ class ChildrenController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|min:10|max:50',
-            'birthdate' => 'required|date|after_or_equal:' . date('Y-m-d', strtotime('-15 years')) . '|before_or_equal:' . date('Y-m-d'),
-            'gender' => 'required',
-            'state' => 'required',
-        ]);
+        $data = $request->validate($this->ruleValidation());
 
         $child = $request->user()->children()->create($data);
 
@@ -38,18 +33,39 @@ class ChildrenController extends Controller
     }
 
     // update
-    public function update(Request $request, Child $child)
+    public function update($id, Request $request)
     {
-        // validate
+        $child = Child::find($id);
 
-        // update
+        $validated = $request->validate($this->ruleValidation());
 
-        // delete all jobs
+        $child->update($validated);
+
         Job::where('meta->child_id', $child->id)->delete();
 
-        // dispatch
         ScheduleForVaccination::dispatch($child);
 
         return redirect()->to(route('dashboard'));
+    }
+
+    public function destroy($id)
+    {
+        $child = Child::find($id);
+
+        Job::where('meta->child_id', $child->id)->delete();
+
+        $child->delete();
+
+        return redirect()->to(route('dashboard'));
+    }
+
+    protected function ruleValidation()
+    {
+        return [
+            'name' => 'required|min:10|max:50',
+            'birthdate' => 'required|date|after_or_equal:' . date('Y-m-d', strtotime('-15 years')) . '|before_or_equal:' . date('Y-m-d'),
+            'gender' => 'required',
+            'state' => 'required',
+        ];
     }
 }
