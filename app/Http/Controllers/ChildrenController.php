@@ -12,7 +12,7 @@ class ChildrenController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->validate($this->ruleValidation());
+        $data = $request->validate($this->validationRule());
 
         $child = $request->user()->children()->create($data);
 
@@ -37,7 +37,7 @@ class ChildrenController extends Controller
     {
         $child = Child::find($id);
 
-        $validated = $request->validate($this->ruleValidation());
+        $validated = $request->validate($this->validationRule());
 
         $child->update($validated);
 
@@ -59,7 +59,7 @@ class ChildrenController extends Controller
         return redirect()->to(route('dashboard'));
     }
 
-    protected function ruleValidation()
+    protected function validationRule()
     {
         return [
             'name' => 'required|min:10|max:50',
