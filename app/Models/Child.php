@@ -85,8 +85,7 @@ class Child extends Model
                             'name' => $vaccine['name'],
                             'date' => Carbon::now()
                                 ->addMonths($this->age_in_months)
-                                ->addDays(3)
-                                ->format('Y-m-d')
+                                ->format('F Y')
                         ];
                     }
                 }
