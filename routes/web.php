@@ -8,13 +8,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TermsOfServiceController;
 use App\Http\Controllers\WelcomeController;
-use App\Jobs\SendVaccineNotification;
-use App\Models\Child;
-use App\Models\ChildVaccine;
-use App\Models\User;
-use App\Models\Vaccine;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, '__invoke'])->middleware('guest')->name('welcome');
