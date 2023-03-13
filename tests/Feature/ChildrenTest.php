@@ -21,7 +21,7 @@ class ChildrenTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function addChildrenProvider(): array
+    public function childrenProvider(): array
     {
         return [
             [
@@ -56,12 +56,11 @@ class ChildrenTest extends TestCase
     }
 
     /**
-     * @dataProvider addChildrenProvider
+     * @dataProvider childrenProvider
      */
     public function test_add_children($name, $birthdate, $gender, $state, $expectedNotification): void
     {
         Queue::fake();
-        Notification::fake();
 
         $this->seed(VaccineSeeder::class);
 
@@ -89,34 +88,78 @@ class ChildrenTest extends TestCase
         Queue::assertPushed(SendVaccineNotification::class, $expectedNotification);
     }
 
-    public function test_children_can_be_updated()
+    /**
+     * @dataProvider childrenProvider
+     */
+    public function test_children_can_be_updated($name, $birthdate, $gender, $state, $expectedNotification)
     {
-        //
-    }
+        Queue::fake();
 
-    public function test_children_can_be_deleted()
-    {
-        //
-    }
+        $this->seed(VaccineSeeder::class);
 
-    public function test_queue_job()
-    {
-        $user = User::factory()->create();
+        $input = [
+            'name' => $name,
+            'birthdate' => $birthdate,
+            'gender' => $gender,
+            'state' => $state
+        ];
 
-        $child = $user->children()->create([
-            'parent_id' => $user->id,
-            'name' => fake()->name('male'),
-            'birthdate' => Carbon::now()->format('Y-m-d'),
-            'gender' => 'male',
-            'state' => 'johor',
-        ]);
-
-        SendVaccineNotification::dispatch(
-            $user,
-            $child,
-            'BCG'
+        $response = $this->actingAs(
+            $user = User::factory()
+                ->afterCreating(function ($user) {
+                    $user->children()->create([
+                        'name' => fake()->name('male'),
+                        'birthdate' => Carbon::now()->format('Y-m-d'),
+                        'gender' => 'male',
+                        'state' => 'selangor'
+                    ]);
+                })
+                ->create()
+        )->put(
+            'children/' . $user->children()->first()->id,
+            $input
         );
 
-        dd('success');
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('children', $input);
+
+        Queue::assertPushed(ScheduleForVaccination::class);
+
+        $child = Child::with('parent')->where('name', $name)->first();
+
+        $job = new ScheduleForVaccination($child);
+        $job->handle();
+
+        Queue::assertPushed(SendVaccineNotification::class, $expectedNotification);
+    }
+
+    /**
+     * @dataProvider childrenProvider
+     */
+    public function test_children_can_be_deleted($name, $birthdate, $gender, $state, $expectedNotification)
+    {
+        $this->seed(VaccineSeeder::class);
+
+        $input = [
+            'name' => $name,
+            'birthdate' => $birthdate,
+            'gender' => $gender,
+            'state' => $state
+        ];
+
+        $response = $this->actingAs(
+            $user = User::factory()
+                ->afterCreating(function ($user) use ($input) {
+                    $user->children()->create($input);
+                })
+                ->create()
+        )->delete(
+            'children/' . $user->children()->first()->id,
+        );
+
+        $response->assertStatus(302);
+
+        $this->assertDatabaseMissing('children', $input);
     }
 }
